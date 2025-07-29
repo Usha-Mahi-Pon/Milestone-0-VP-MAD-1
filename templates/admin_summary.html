@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Parking Summary</h2>
+
+<p><strong>Total Revenue:</strong> ₹{{ total_revenue }}</p>
+
+<table border="1">
+    <tr>
+        <th>User</th>
+        <th>Lot</th>
+        <th>Spot</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Duration (hrs)</th>
+        <th>Cost</th>
+    </tr>
+    {% for res in reservations %}
+    <tr>
+        <td>{{ res.user.full_name }}</td>
+        <td>{{ res.spot.lot.name }}</td>
+        <td>{{ res.spot.spot_number }}</td>
+        <td>{{ res.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ res.end_time.strftime('%Y-%m-%d %H:%M') if res.end_time else '-' }}</td>
+        <td>
+            {% if res.end_time %}
+            {{ ((res.end_time - res.start_time).total_seconds() / 3600)|round(2) }}
+            {% else %}-{% endif %}
+        </td>
+        <td>{{ res.cost if res.cost else '-' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
