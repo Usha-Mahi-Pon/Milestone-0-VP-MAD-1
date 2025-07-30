@@ -1,4 +1,5 @@
 from extensions import db
+from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,3 +29,15 @@ class Reservation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     parking_timestamp = db.Column(db.DateTime)
     leaving_timestamp = db.Column(db.DateTime)
+    parking_cost = db.Column(db.Float, default=0.0)
+    
+    @property
+    def current_cost(self):
+        """Calculate current cost for active reservations"""
+        if self.leaving_timestamp:
+            return self.parking_cost
+        elif self.parking_timestamp:
+            duration = datetime.now() - self.parking_timestamp
+            duration_hours = duration.total_seconds() / 3600
+            return round(duration_hours * self.spot.lot.price, 2)
+        return 0.0

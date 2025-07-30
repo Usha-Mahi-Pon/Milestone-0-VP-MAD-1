@@ -73,7 +73,18 @@
             res.leaving_timestamp.strftime('%Y-%m-%d %H:%M:%S') }} {% else %}
             Active {% endif %}
           </td>
-          <td>{{ res.parking_cost if res.parking_cost else '-' }}</td>
+          <td>
+            {% if res.leaving_timestamp %}
+            <span class="text-success fw-bold"
+              >₹{{ "%.2f"|format(res.parking_cost) }}</span
+            >
+            {% else %}
+            <span class="text-warning fw-bold"
+              >₹{{ "%.2f"|format(res.current_cost) }}</span
+            >
+            <small class="text-muted d-block">(Running)</small>
+            {% endif %}
+          </td>
           <td>
             {% if not res.leaving_timestamp %}
             <form

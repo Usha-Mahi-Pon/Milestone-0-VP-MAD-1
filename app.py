@@ -224,9 +224,20 @@ def release_spot(res_id):
     reservation = Reservation.query.get(res_id)
     if reservation and reservation.user_id == session['user_id'] and reservation.leaving_timestamp is None:
         reservation.leaving_timestamp = datetime.now()
+        
+        # Calculate parking duration in hours
+        duration = reservation.leaving_timestamp - reservation.parking_timestamp
+        duration_hours = duration.total_seconds() / 3600
+        
+        # Calculate cost based on lot price per hour
+        lot_price = reservation.spot.lot.price
+        reservation.parking_cost = round(duration_hours * lot_price, 2)
+        
+        # Release the spot
         reservation.spot.status = 'A'
         db.session.commit()
-        flash("Spot released successfully!", "success")
+        
+        flash(f"Spot released successfully! Total cost: ₹{reservation.parking_cost}", "success")
 
     return redirect(url_for('user_dashboard'))
 
