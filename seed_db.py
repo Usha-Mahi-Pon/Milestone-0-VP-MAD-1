@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from app import app, db
-from models import User, ParkingLot, ParkingSpot, Reservation
+from models.models import User, ParkingLot, ParkingSpot, Reservation
 
 with app.app_context():
     # Clear old data
@@ -29,14 +29,14 @@ with app.app_context():
     # -------------------
     lot1 = ParkingLot(
         prime_location_name="City Center Mall",
-        price=50.0,
+        price=450.0,
         address="123 Main Street",
         pincode="600001",
         maximum_number_of_spots=5
     )
     lot2 = ParkingLot(
         prime_location_name="Airport Parking",
-        price=80.0,
+        price=580.0,
         address="Airport Road",
         pincode="600027",
         maximum_number_of_spots=3

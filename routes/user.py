@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
 from datetime import datetime
-from models import db, ParkingLot, ParkingSpot, Reservation
+from models.models import db, ParkingLot, ParkingSpot, Reservation
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -65,6 +65,8 @@ def release_spot(reservation_id):
         flash(f'Spot {reservation.spot.spot_number} released! Cost: ₹{reservation.parking_cost}', 'success')
 
     return redirect(url_for('user.dashboard'))
+
+
 @user_bp.route('/history-chart-data')
 def history_chart_data():
     if 'role' not in session or session['role'] != 'user':
